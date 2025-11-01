@@ -4,10 +4,10 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from django.contrib.contenttypes.models import ContentType
 
-from .models import Book, MusicAlbum, SoftwareLicense, ShoppingCart
-from .serializers import (
+from shop.models import Book, MusicAlbum, SoftwareLicense, ShoppingCart
+from shop.filters import BookFilter, MusicAlbumFilter, SoftwareLicenseFilter
+from shop.serializers import (
     BookSerializer,
     MusicAlbumSerializer,
     SoftwareLicenseSerializer,
@@ -18,17 +18,21 @@ from .serializers import (
 class BookViewSet(viewsets.ModelViewSet):
     queryset = Book.objects.all().order_by("id")
     serializer_class = BookSerializer
+    filterset_class = BookFilter
+    search_fields = ["title", "author"]
 
 
 class MusicAlbumViewSet(viewsets.ModelViewSet):
     queryset = MusicAlbum.objects.all().order_by("id")
     serializer_class = MusicAlbumSerializer
-
+    filterset_class = MusicAlbumFilter
+    search_fields = ["artist", "title"]
 
 class SoftwareLicenseViewSet(viewsets.ModelViewSet):
     queryset = SoftwareLicense.objects.all().order_by("id")
     serializer_class = SoftwareLicenseSerializer
-
+    filterset_class = SoftwareLicenseFilter
+    search_fields = ["name"]
 
 class ShoppingCartViewSet(viewsets.ModelViewSet):
     queryset = ShoppingCart.objects.prefetch_related(
